@@ -16,6 +16,8 @@ def creat_character():
     while amb > 10 or amb <0:
         amb = int(input("Ambition level (1-10): "))
 
-print("")
+    print(f"Welcome {name} {last_name}")
+
+print(creat_character())
 
 print (creat_character())
