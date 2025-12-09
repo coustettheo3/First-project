@@ -1,0 +1,16 @@
+print(f"As you step into Hogwarts for the first time, you quickly meet three students.\n"
+      "A red-haired boy smiles at you.\n"
+      "\"Hey! I'm Ron. Nice to meet you!\"\n"
+      "A girl with bushy hair adjusts her books.\n"
+      "\"I'm Hermione. If you need help with classes, just ask!\"\n"
+      "Then a pale boy walks by with a smug expression.\n"
+      "\"Draco Malfoy. Remember the name,\" he says before leaving.\n\n"
+
+      "Soon after, it is time to choose your House.\n"
+      "You may decide directly, or take a short personality test.\n"
+      "Here are your questions:\n"
+      "1. What matters most to you: courage, knowledge, loyalty, or ambition?\n"
+      "2. How do you react to danger: face it, study it, support others, or outsmart it?\n"
+      "3. What do you value in friends: bravery, intelligence, kindness, or influence?\n\n"
+
+      f"Based on your answers, the Sorting Hat places you in: {house}!\n\n"
