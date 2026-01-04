@@ -1,22 +1,71 @@
+import json
+
+from utils.input_utils import load_file
+
+
+
+def ask_number(text, min_val, max_val):
+    choice = 0
+    while choice < min_val or choice > max_val:
+        try:
+            choice = int(input(text))
+        except ValueError:
+            choice = 0
+    return choice
+
+
+def modify_money(character, amount):
+    if "Money" not in character:
+        character["Money"] = 0
+    character["Money"] += amount
+
+
+def add_item(character, key, item_name):
+    if key not in character:
+        character[key] = []
+
+    character[key].append(item_name)
+
+
+def display_character(character):
+    print("\n=== YOUR CHARACTER ===")
+    print(f"Name: {character.get('Name', '')} {character.get('LastName', '')}")
+    print(f"Money: {character.get('Money', 0)} Galleons")
+    print(f"Inventory: {character.get('Inventory', [])}")
+    print("======================\n")
+
 
 def creat_character():
+    global character
     print("welcome to login your character")
     name = input("Enter a name :")
     last_name = input("Enter a last name :")
     print("Choose your attributes:")
     cour = int(input("Courage level (1-10) of your character's:" ))
-    while cour > 10 or cour <0:
+    while cour > 10 or cour < 0:
         cour = int(input("Courage level (1-10) of your character's:"))
     inte = int(input("Intelligence level (1-10) of your character's:"))
-    while inte > 10 or inte <0:
+    while inte > 10 or inte < 0:
         inte = int(input("Intelligence level (1-10) of your character's:"))
     loy = int(input("Loyalty level (1-10) of your character's: "))
-    while  loy > 10 or loy <0:
+    while loy > 10 or loy < 0:
         loy = int(input("Loyalty level (1-10) of your character's: "))
     amb = int(input("Ambition level (1-10): "))
-    while amb > 10 or amb <0:
+    while amb > 10 or amb < 0:
         amb = int(input("Ambition level (1-10): "))
     print(f"Welcome {name} {last_name}")
+
+    character = {
+        "Name": name,
+        "LastName": last_name,
+        "Courage": cour,
+        "Intelligence": inte,
+        "Loyalty": loy,
+        "Ambition": amb,
+        "Money": 50,      # tu peux mettre la somme que tu veux
+        "Inventory": []
+    }
+
 
 def receive_letter():
     print("An owl flies through the window, delivering a letter sealed with the"
@@ -31,18 +80,25 @@ def receive_letter():
     print("choice 2. No, I'd rather stay with Uncle Vernon...")
     print()
     choice = 0
-    while choice != 1 and choice !=2:
+    while choice != 1 and choice != 2:
         choice = int(input("Enter your choice (1;2)"))
     print(f"Your choice : {choice}")
-    print("ou tear up the letter, and Uncle Vernon cheers:"
-        "“EXCELLENT! Finally, someone NORMAL in this house!”"
-        "The magical world will never know you existed... Game over.")
+
+    if choice == 2:
+        print("You tear up the letter, and Uncle Vernon cheers:"
+            "“EXCELLENT! Finally, someone NORMAL in this house!”"
+            "The magical world will never know you existed... Game over.")
+
+
+
 def meet_hagrid():
     print("Hagrid: 'Hello Harry! I’m here to help you with your shopping on Diagon"
           "Alley.'")
     print()
     print("Do you want to follow Hagrid?")
     print()
+    print("choice 1. Yes")
+    print("choice 2. No")
     choice = 0
     while choice != 1 and choice != 2:
         choice = int(input("Enter your choice (1;2)"))
@@ -55,6 +111,15 @@ def buy_supplies(character):
     print("\nWelcome to Diagon Alley!")
 
     raw_data = load_file("data/inventory.json")
+
+    # si load_file renvoie un chemin, on lit le json ici
+    if isinstance(raw_data, str):
+        try:
+            with open(raw_data, "r", encoding="utf-8") as f:
+                raw_data = json.load(f)
+        except Exception:
+            print("Error: Cannot open inventory.json. Check load_file and file path.")
+            return
     items_catalog = {}
 
     for value in raw_data.values():
@@ -76,8 +141,6 @@ def buy_supplies(character):
         print("\nCatalog of available items:")
         item_list = list(items_catalog.keys())
 
-        if len(item_list) == 0:
-            exit_game("Error: The catalog is empty. Please check inventory.json structure.")
 
         index = 1
         for name in item_list:
@@ -100,8 +163,7 @@ def buy_supplies(character):
 
             if item_name in required_items:
                 required_items.remove(item_name)
-        else:
-            exit_game("You do not have enough money to buy a mandatory item. Game Over.")
+
 
     print("All required items have been purchased!")
     print("It's time to choose your Hogwarts pet!")
@@ -122,8 +184,7 @@ def buy_supplies(character):
         modify_money(character, -pet_price)
         add_item(character, "Inventory", pet_name)
         print(f"You chose: {pet_name} (-{pet_price} Galleons).")
-    else:
-        exit_game("You don't have enough money for this pet! Game Over.")
+
 
     print("All required items have been successfully purchased! Here is your final inventory:")
     display_character(character)
@@ -135,5 +196,3 @@ def start_chapter_1():
     meet_hagrid()
     buy_supplies(character)
     print("You just finish the first chapter!")
-
-

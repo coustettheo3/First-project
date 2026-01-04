@@ -79,7 +79,7 @@ def ask_choice(message, options):
 
 
 def load_file(file_path):
-    current_dir = os.path.dirname(_file_)
+    current_dir = os.path.dirname(__file__)
     root_dir = os.path.dirname(current_dir)
     full_path = os.path.join(root_dir, file_path)
 
