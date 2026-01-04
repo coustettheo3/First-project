@@ -50,11 +50,83 @@ def meet_hagrid():
     print()
     print("Hagrid gently insists and takes you along anyway!")
 
+
 def buy_supplies(character):
-    print("Welcome to Diagon Alley!")
-    print()
-    """je nn'ai pas fais cette fonction
-    refait, c'est relou"""
+    print("\nWelcome to Diagon Alley!")
+
+    raw_data = load_file("data/inventory.json")
+    items_catalog = {}
+
+    for value in raw_data.values():
+        if isinstance(value, list) and len(value) >= 2:
+            name = value[0]
+            price = value[1]
+            items_catalog[name] = price
+
+    pets_catalog = {
+        "Owl": 20,
+        "Cat": 15,
+        "Rat": 10,
+        "Toad": 5
+    }
+
+    required_items = ["Magic Wand", "Wizard Robe", "Potions Book"]
+
+    while len(required_items) > 0:
+        print("\nCatalog of available items:")
+        item_list = list(items_catalog.keys())
+
+        if len(item_list) == 0:
+            exit_game("Error: The catalog is empty. Please check inventory.json structure.")
+
+        index = 1
+        for name in item_list:
+            price = items_catalog[name]
+            req_mark = "(required)" if name in required_items else ""
+            print(f"{index}. {name} - {price} Galleons {req_mark}")
+            index += 1
+
+        print(f"You have {character['Money']} Galleons.")
+        print(f"Remaining required items: {', '.join(required_items)}")
+
+        choice_index = ask_number("Enter the number of the item to buy: ", 1, len(item_list))
+        item_name = item_list[choice_index - 1]
+        price = items_catalog[item_name]
+
+        if character["Money"] >= price:
+            modify_money(character, -price)
+            add_item(character, "Inventory", item_name)
+            print(f"You bought: {item_name} (-{price} Galleons).")
+
+            if item_name in required_items:
+                required_items.remove(item_name)
+        else:
+            exit_game("You do not have enough money to buy a mandatory item. Game Over.")
+
+    print("All required items have been purchased!")
+    print("It's time to choose your Hogwarts pet!")
+    print(f"You have {character['Money']} Galleons.")
+
+    print("Available pets:")
+    pet_list = list(pets_catalog.keys())
+    index = 1
+    for name, price in pets_catalog.items():
+        print(f"{index}. {name} - {price} Galleons")
+        index += 1
+
+    choice_index = ask_number("Which pet do you want? ", 1, len(pet_list))
+    pet_name = pet_list[choice_index - 1]
+    pet_price = pets_catalog[pet_name]
+
+    if character["Money"] >= pet_price:
+        modify_money(character, -pet_price)
+        add_item(character, "Inventory", pet_name)
+        print(f"You chose: {pet_name} (-{pet_price} Galleons).")
+    else:
+        exit_game("You don't have enough money for this pet! Game Over.")
+
+    print("All required items have been successfully purchased! Here is your final inventory:")
+    display_character(character)
 
 
 def start_chapter_1():
