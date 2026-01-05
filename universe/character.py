@@ -20,4 +20,3 @@ def creat_character():
 
 print(creat_character())
 
-print (creat_character())
