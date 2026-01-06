@@ -18,5 +18,22 @@ def creat_character():
 
     print(f"Welcome {name} {last_name}")
 
-print(creat_character())
 
+def display_character(character):
+    print("\nCharacter profile:")
+    for key, value in character.items():
+        if isinstance(value, list):
+            content = ", ".join(value) if value else ""
+            print(f"{key}: {content}")
+        elif isinstance(value, dict):
+            print(f"{key}:")
+            for sub_key, sub_value in value.items():
+                print(f"- {sub_key}: {sub_value}")
+        else:
+            print(f"{key}: {value}")
+
+def add_item(character, key, item):
+    if key in character and isinstance(character[key], list):
+        character[key].append(item)
+    else:
+        print(f"Error: Impossible to add item to '{key}'.")
