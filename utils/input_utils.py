@@ -79,17 +79,6 @@ def ask_choice(message, options):
 
 
 def load_file(file_path):
-    current_dir = os.path.dirname(__file__)
-    root_dir = os.path.dirname(current_dir)
-    full_path = os.path.join(root_dir, file_path)
-
-    try:
-        with open(full_path, 'r', encoding='utf-8') as f:
+        with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
             return data
-    except FileNotFoundError:
-        print(f"Error: The file {full_path} was not found.")
-        return {}
-    except json.JSONDecodeError:
-        print(f"Error: The file {full_path} is not valid JSON.")
-        return {}
