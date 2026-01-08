@@ -1,3 +1,4 @@
+
 def creat_character():
     print("welcome to login your character")
     name = input("Enter a name :")
@@ -18,6 +19,16 @@ def creat_character():
 
     print(f"Welcome {name} {last_name}")
 
+def init_character(last_name, first_name, attributes):
+    character = {
+        "Last Name": last_name,
+        "First Name": first_name,
+        "Money": 100,
+        "Inventory": [],
+        "Spells": [],
+        "Attributes": attributes
+    }
+    return character
 
 def display_character(character):
     print("\nCharacter profile:")
@@ -37,3 +48,5 @@ def add_item(character, key, item):
         character[key].append(item)
     else:
         print(f"Error: Impossible to add item to '{key}'.")
+def modify_money(character, amount):
+    character["Money"] += amount
